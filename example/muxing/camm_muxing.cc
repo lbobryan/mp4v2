@@ -79,9 +79,8 @@ static int WriteSampleCammBytes(void *bytes, int packet_number) {
       vertical_accuracy_meters, vertical_east_velocity_mps,
       vertical_north_velocity_mps, speed_accuracy_mps, altitude,
       magnetic_field_x, magnetic_field_y, magnetic_field_z,
-      pixel_exposure_nanoseconds, rolling_shutter_skew_time,
       vertical_up_velocity_mps;
-  uint64_t latitude64, longitude64, time_gps_epoch;
+  uint64_t latitude64, longitude64, time_gps_epoch, pixel_exposure_nanoseconds, rolling_shutter_skew_time;
   memset(bytes, 0, BYTE_BUFFER_SIZE);
   uint16_t *camm_data = reinterpret_cast<uint16_t *>(bytes);
   uint16_t packet_type = packet_number % 8;
