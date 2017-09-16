@@ -77,7 +77,7 @@ static int WriteSampleCammBytes(void *bytes, int packet_number) {
       acceleration_y, acceleration_z, position_x, position_y, position_z,
       gps_fix_type, horizontal_accuracy_meters,
       vertical_accuracy_meters, vertical_east_velocity_mps,
-      vertical_north_velocity_mps, speed_accuracy_mps,
+      vertical_north_velocity_mps, speed_accuracy_mps, altitude32,
       magnetic_field_x, magnetic_field_y, magnetic_field_z,
       pixel_exposure_nanoseconds, rolling_shutter_skew_time,
       vertical_up_velocity_mps;
@@ -131,7 +131,7 @@ static int WriteSampleCammBytes(void *bytes, int packet_number) {
     case 5:
       latitude64 = double_to_bytes(37.454356 + .001 * packet_number);
       longitude64 = double_to_bytes(-122.167477 + 0.001 * packet_number);
-      altitude64 = 0;
+      altitude64 = double_to_bytes(64);
       memcpy(camm_data, &latitude64, 8);
       memcpy(camm_data + 4, &longitude64, 8);
       memcpy(camm_data + 8, &altitude64, 8);
@@ -149,9 +149,9 @@ static int WriteSampleCammBytes(void *bytes, int packet_number) {
       longitude64 = double_to_bytes(-122.167477 + .001 * packet_number);
       memcpy(camm_data, &longitude64, 8);
       camm_data += 4;
-      altitude64 = 0;
-      memcpy(camm_data, &altitude64, 8);
-      camm_data += 4;
+      altitude32 = float_to_bytes(32);
+      memcpy(camm_data, &altitude32, 4);
+      camm_data += 2;
       horizontal_accuracy_meters = float_to_bytes(7.5);
       memcpy(camm_data, &horizontal_accuracy_meters, 4);
       camm_data += 2;
