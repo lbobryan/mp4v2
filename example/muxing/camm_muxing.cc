@@ -187,10 +187,14 @@ static int WriteSampleCammBytes(void *bytes, int packet_number) {
 static void WriteCammPacket(MP4FileHandle handle, int camm_track_id, int pts,
                             int packet_num, char *buffer) {
   int packet_size = WriteSampleCammBytes(buffer, packet_num);
+  // This line will cause the pts to decrease in the file rather than increase.
+  // The demuxer parsing CAMM data should be able to handle that, however, and
+  // can sort the samples by pts later.
+  int decreasing_pts = 805500 - pts;
   if (!MP4WriteSample(handle, camm_track_id,
                       reinterpret_cast<uint8_t *>(buffer), packet_size,
                       /* duration */ 0,
-                      /* rendering_offset */ pts,
+                      /* rendering_offset */ decreasing_pts,
                       /* is_sync_sample */ true)) {
     printf("Failed to write camm track sample\n");
     exit(1);
